@@ -17,9 +17,9 @@
 	<div class="container">
 		<h1>Welcome</h1>
 		
-		<form class="form" action="@routes.Application.submit()" method="GET" >
+		<form class="form" action="@routes.Application.submit()" method="post" id="hope" >
 			<input type="text" placeholder="Username" name="username">
-			<input type="password" placeholder="Password">
+			<input type="password" placeholder="Password" name="password">
 			<button  name="action" value="submit" type="submit" id="login-button">Login</button>
 		</form>
                 
