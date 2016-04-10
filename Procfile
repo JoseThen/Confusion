@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/Confusion -Dhttp.port=${PORT} -Ddb.default.url=“jdbc:”${DATABASE_URL} -Dplay.crypto.secret=${APPLICATION_SECRET}
