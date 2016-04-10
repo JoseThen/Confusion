@@ -1,1 +1,1 @@
-web: target/start -Dhttp.port=${PORT} -Ddb.default.url=${DATABASE_URL} -Dplay.crypto.secret=${APPLICATION_SECRET} -DapplyEvolutions.default=true
+-Dhttp.port=${PORT} -Ddb.default.url=${DATABASE_URL} -Dplay.crypto.secret=${APPLICATION_SECRET} -DapplyEvolutions.default=true
