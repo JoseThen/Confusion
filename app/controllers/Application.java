@@ -50,11 +50,14 @@ public class Application extends Controller {
             flash("error", "Incorrect username or password.");
             return ok(views.html.index.render("Incorrect username or password."));
         }
-
+        
         User example = new User();
-        example.setUsername(username);
-        example.setPassword(password);
+        example.set_EmployeeName(username) ;
+   
+        
+       
          
+        // We might be able to use a map for search functionality
 //         Map<String, String> credentials = new HashMap<String, String>();
 //
 // 	    credentials.put("USER", username );
@@ -67,26 +70,6 @@ public class Application extends Controller {
 
     
     
-//    public static Result myAction() {
-//    String[] postAction = request().body().asFormUrlEncoded().get("action");
-//    if (postAction == null || postAction.length == 0) {
-//      return badRequest("You must provide a valid action");
-//    }
-//    else {
-//      String action = postAction[0];
-//      if ("submit".equals(action)) {
-//        return edit(request());
-//      } 
-//      else {
-//        return badRequest("Something Bad Happened :(");
-//      }
-//    }
-//  }
-//
-//  private static Result edit(Request request) {
-//    // TODO
-//    return submit();
-//  }
 
 
     private static boolean isLogin(Statement st, String userName, String password) throws SQLException {
