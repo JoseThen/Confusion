@@ -40,9 +40,9 @@ public class User {
              Statement state = connecion.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
              ResultSet welcomer = state.executeQuery(first);
             	while (welcomer.next()){
-            		if (welcomer !=  null){
+            		
             			realName = welcomer.getString("first_name") + " " + welcomer.getString("last_name");
-            		}
+            		
             	}
             	
             		
@@ -53,7 +53,7 @@ public class User {
          	}
 
          
-         this.Username = realName;
+         this.EmployeeName = realName;
     }
 
 }
