@@ -6,12 +6,18 @@ import javax.sql.DataSource;
 import play.db.DB;
 
 
-
-
 public class User {
-	public String Username;
-	public String Password;
-	public String EmployeeName;
+	private String Username;
+	private String Password;
+    private String EmployeeName;
+
+    public String getEmployeeName() {
+        return EmployeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        EmployeeName = employeeName;
+    }
 	
 	public void setUsername(String username) {
         this.Username = username;
@@ -28,7 +34,22 @@ public class User {
     public String getPassword() {
         return Password;
     }
-    
+
+    public static boolean isLogin(Statement st, String userName, String password) throws SQLException {
+        String query = String.format(
+                "SELECT count(*) FROM employee WHERE " +
+                        "user_name=\"%s\" AND " +
+                        "pass_word=\"%s\"",
+                userName,
+                password
+        );
+        ResultSet set = st.executeQuery(query);
+        if (set.next()) {
+            return set.getInt(1) > 0;
+        }
+        return false;
+    }
+
     public void set_EmployeeName(String empname){
     	
     	String first = "SELECT first_name, last_name FROM employee where user_name ='" + empname + "'";
@@ -54,6 +75,6 @@ public class User {
 
          
          this.EmployeeName = realName;
-    }
+}
 
 }
