@@ -1,7 +1,10 @@
 package controllers;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import models.Product;
 import views.html.*;
 import models.User;
 import play.mvc.Controller;
@@ -16,11 +19,13 @@ import javax.sql.DataSource;
 
 public class Application extends Controller {
 
+    public static Connection connection;
+
     public static Result index() {
         return ok(views.html.index.render("Confusion Inventory"));
     }
 
-    public static Result login() {
+    public static Result login() throws SQLException {
 
         DynamicForm userForm = Form.form().bindFromRequest();
         String username = userForm.data().get("username");
@@ -35,15 +40,8 @@ public class Application extends Controller {
         }
         boolean resultOK = false;
 
-        try {
-            DataSource ds = DB.getDataSource();
-            Connection connection = ds.getConnection();
-            Statement statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            resultOK = User.isLogin(statement, username, password);
+            resultOK = User.isLogin(getDBConnection(), username, password);
             connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         if (!resultOK) {
             flash("error", "Incorrect username or password.");
@@ -51,6 +49,21 @@ public class Application extends Controller {
         }
             User example = new User();
             example.set_EmployeeName(username);
-            return ok(views.html.submit.render(example));
+            List <Product> products = Product.findAllAvailable(getDBConnection());
+            connection.close();
+            return ok(views.html.inventory.render(example,products));
         }
+
+    //future product description page
+    public static Result show(Long id) {
+        return ok(views.html.index.render("hey"));
+    }
+
+    public static Statement getDBConnection() throws SQLException {
+        DataSource ds = DB.getDataSource();
+        connection = ds.getConnection();
+        return connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+
+    }
+
     }

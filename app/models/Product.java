@@ -1,7 +1,14 @@
 package models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
 
+    private int id;
     private String name;
     private String description;
     private float price;
@@ -9,6 +16,14 @@ public class Product {
     private int amount;
     private Category category;
     private Publisher publisher;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -50,6 +65,10 @@ public class Product {
         this.category = category;
     }
 
+    public String getFormattedAmount() {
+        return "$" + amount;
+    }
+
     public int getAmount() {
         return amount;
     }
@@ -66,9 +85,26 @@ public class Product {
         this.publisher = publisher;
     }
 
+    public static List<Product> findAllAvailable(Statement stmt) throws SQLException {
 
+        List<Product> products = new ArrayList<Product>();
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product");
 
-
-
+        // Fetch each row from the result set
+        while (rs.next())
+        {
+            Product product = new Product();
+            int amount = rs.getInt("stock_amount");
+            if (amount > 0)
+                product.setAmount(amount);
+            else
+                continue;
+            product.setId(rs.getInt("product_id"));
+            product.setName(rs.getString("product_name"));
+            product.setPrice(rs.getFloat("unit_price"));
+            products.add(product);
+        }
+        return products;
+    }
 
 }

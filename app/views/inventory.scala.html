@@ -1,0 +1,23 @@
+@(example : models.User, products: List[Product])
+
+@main("Welcome Back")	{
+
+		<div>
+		<h1>Welcome back      @example.getEmployeeName()</h1><br>
+			@if(products.isEmpty()) {
+			<h2>No Games Available</h2>
+			} else {
+			<ul>
+				<li>id name price amount in stock</li>
+				@for(p <- products) {
+				<li>
+					@p.getId()
+					<a href = "@routes.Application.show(p.getId())">
+						@p.getName()
+					</a>  @p.getPrice() @p.getAmount()
+				</li>
+				}
+			</ul>
+			}
+		</div>
+}
