@@ -4,7 +4,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Category;
 import models.Product;
+import models.Publisher;
 import views.html.*;
 import models.User;
 import play.mvc.Controller;
@@ -50,8 +52,10 @@ public class Application extends Controller {
             User example = new User();
             example.set_EmployeeName(username);
             List <Product> products = Product.findAllAvailable(getDBConnection());
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
             connection.close();
-            return ok(views.html.inventory.render(example,products));
+            return ok(views.html.inventory.render(example,products,publishers,categories));
         }
 
     //future product description page

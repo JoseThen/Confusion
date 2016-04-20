@@ -1,23 +1,89 @@
-@(example : models.User, products: List[Product])
+@(example : models.User, products: List[Product], publishers: List[Publisher], categories: List[Category])
 
-@main("Welcome Back")	{
+@main("Welcome Back")    {
 
-		<div>
-		<h1>Welcome back      @example.getEmployeeName()</h1><br>
-			@if(products.isEmpty()) {
-			<h2>No Games Available</h2>
-			} else {
-			<ul>
-				<li>id name price amount in stock</li>
-				@for(p <- products) {
-				<li>
-					@p.getId()
-					<a href = "@routes.Application.show(p.getId())">
-						@p.getName()
-					</a>  @p.getPrice() @p.getAmount()
-				</li>
-				}
-			</ul>
-			}
-		</div>
+<div>
+    <h1>Welcome back @example.getEmployeeName()</h1><br>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control input-lg" placeholder="Enter game name"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- filter sidebar -->
+            <div id="filter-sidebar"
+                 class="col-xs-6 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
+
+                <div>
+                    <h4 data-toggle="collapse" data-target="#group-1">
+                        <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                        <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                        Categories
+                    </h4>
+                    <div id="group-1" class="list-group collapse in">
+                        @for(c<- categories){
+                        <a class="list-group-item" href="#">
+                            <span class="badge"></span> @c.getName()
+                        </a>
+                       }
+                    </div>
+                </div>
+
+                <div>
+                    <h4 data-toggle="collapse" data-target="#group-2">
+                        <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                        <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                        Publishers
+                    </h4>
+                    <div id="group-2" class="list-group collapse in">
+                        @for(pub<- publishers){
+                        <a class="list-group-item" href="#">
+                            <span class="badge"></span> @pub.getName()
+                        </a>
+                        }
+                    </div>
+                </div>
+
+            </div>
+            @if(products.isEmpty()) {
+            <h2>No Games Available</h2>
+            } else {
+            <table class="table-fill">
+                <thead>
+                <tr>
+                    <th class="text-left">ID</th>
+                    <th class="text-left">Product Name</th>
+                    <th class="text-left">Amount</th>
+                    <th class="text-left">Price</th>
+                </tr>
+                </thead>
+                <tbody class="table-hover">
+                @for(p <- products) {
+
+                <tr>
+                    <td class="text-left">@p.getId()</td>
+                    <td class="text-left"><a href="@routes.Application.show(p.getId())">@p.getName()</a></td>
+                    <td class="text-left">@p.getAmount()</td>
+                    <td class="text-left">@p.getPrice()</td>
+                </tr>
+
+                }
+                </tbody>
+            </table>
+            }
+        </div>
+
+</div>
 }

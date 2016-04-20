@@ -14,7 +14,17 @@ public class Product {
     private float price;
     private String version;
     private int amount;
-    private Category category;
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    private int categoryId;
+//    private Category category;
     private Publisher publisher;
 
     public int getId() {
@@ -57,13 +67,13 @@ public class Product {
         this.version = version;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+//    public Category getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
 
     public String getFormattedAmount() {
         return "$" + amount;
