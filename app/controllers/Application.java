@@ -50,8 +50,8 @@ public class Application extends Controller {
             return redirect(routes.Application.index());
         }
             User example = new User();
-            example.set_EmployeeName(username);
-            List <Product> products = Product.findAllAvailable(getDBConnection());
+            example.set_EmployeeClass(getDBConnection(),username);
+        List <Product> products = Product.findAllAvailable(getDBConnection());
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
             connection.close();
