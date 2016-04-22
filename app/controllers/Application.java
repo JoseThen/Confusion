@@ -55,7 +55,7 @@ public class Application extends Controller {
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
             connection.close();
-            session("connected", username);
+           
            
             return ok(views.html.inventory.render(example,products,publishers,categories));
         }
