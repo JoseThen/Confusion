@@ -67,14 +67,6 @@ public class Product {
         this.version = version;
     }
 
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
-
     public String getFormattedAmount() {
         return "$" + amount;
     }
@@ -115,6 +107,28 @@ public class Product {
             products.add(product);
         }
         return products;
+    }
+    
+    public  void setSpecific(Statement stmt,Long id) throws SQLException {
+
+        //List<Product> products = new ArrayList<Product>();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM product where product_id = " + id);
+        //Product product = new Product();
+        // Fetch each row from the result set
+        while (rs.next())
+        {
+           
+            
+            setId(rs.getInt("product_id"));
+            setName(rs.getString("product_name"));
+            setPrice(rs.getFloat("unit_price"));
+            setDescription(rs.getString("product_description"));
+            setAmount(rs.getInt("stock_amount")); 
+            
+            
+            
+        }
+      
     }
 
 }
