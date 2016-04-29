@@ -55,17 +55,14 @@ public class Application extends Controller {
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
             connection.close();
-            
+           
            
             return ok(views.html.inventory.render(example,products,publishers,categories));
         }
 
     //future product description page
-    public static Result show(long id) throws SQLException {
-    	
-    	Product productos = new  Product(); //findSpecific(getDBConnection(), id);
-    	productos.setSpecific(getDBConnection(), id);
-        return ok(views.html.product.render(productos));
+    public static Result show(Long id) {
+        return ok(views.html.index.render("hey"));
     }
 
     public static Statement getDBConnection() throws SQLException {
