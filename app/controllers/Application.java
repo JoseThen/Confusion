@@ -61,9 +61,12 @@ public class Application extends Controller {
         }
 
     //future product description page
-    public static Result show(Long id) {
-        return ok(views.html.index.render("hey"));
-    }
+    public static Result show(long id) throws SQLException {
+
+        Product productos = new  Product(); //findSpecific(getDBConnection(), id);
+        productos.setSpecific(getDBConnection(), id);
+          return ok(views.html.product.render(productos));
+      }
 
     public static Statement getDBConnection() throws SQLException {
         DataSource ds = DB.getDataSource();
