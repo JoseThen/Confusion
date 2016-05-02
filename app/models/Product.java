@@ -144,12 +144,6 @@ public class Product {
         return getListOfProducts(rs);
     }
 
-    public static List<Product> findByCategory(Statement stmt, String category) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,category"+
-                "WHERE category.category_id = product.category_id AND category.category_name = "+ category);
-        return getListOfProducts(rs);
-    }
-
     public static List<Product> getListOfProducts(ResultSet rs) throws SQLException {
         List<Product> products = new ArrayList<Product>();
         // Fetch each row from the result set
