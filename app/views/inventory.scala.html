@@ -1,21 +1,25 @@
-@(example : models.User, products: List[Product], publishers: List[Publisher], categories: List[Category])
+@(products: List[Product], publishers: List[Publisher], categories: List[Category])
 
 @main("Welcome Back")    {
 
 <div>
-    <h1>Welcome back @example.getEmployeeName()</h1><br>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div id="custom-search-input">
+                <form action="@routes.Application.search()" method="get">
                 <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-lg" placeholder="Enter game name"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
+
+                        <input type="text" class="form-control input-lg" name="search" placeholder="Enter game name"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info btn-lg" name="action" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
                 </div>
+                </form>
             </div>
+            <a href="@routes.Application.sortByName()"><span class="glyphicon glyphicon-by-attributes"></span> Sort Games By Name</a>
+            <a href="@routes.Application.sortByPrice()"><span class="glyphicon glyphicon-by-attributes"></span> Sort Games By Price</a>
         </div>
     </div>
     <br/><br/>

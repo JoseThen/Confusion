@@ -3,9 +3,14 @@
 # ~~~~
 
 GET     /                           controllers.Application.index()
-POST    /login                          controllers.Application.login()
+POST    /login                      controllers.Application.login()
+GET     /logout                     controllers.Application.logout()
 
-GET     /inventory/:id          controllers.Application.show(id:Long)
+GET     /search                     controllers.Application.search()
+GET     /sort/name                  controllers.Application.sortByName()
+GET     /sort/price                 controllers.Application.sortByPrice()
+
+GET     /inventory/:id              controllers.Application.show(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -88,25 +88,16 @@ public class Product {
     }
 
     public static List<Product> findAllAvailable(Statement stmt) throws SQLException {
-
-        List<Product> products = new ArrayList<Product>();
         ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product");
+        return getListOfProducts(rs);
+    }
 
-        // Fetch each row from the result set
-        while (rs.next())
-        {
-            Product product = new Product();
-            int amount = rs.getInt("stock_amount");
-            if (amount > 0)
-                product.setAmount(amount);
-            else
-                continue;
-            product.setId(rs.getInt("product_id"));
-            product.setName(rs.getString("product_name"));
-            product.setPrice(rs.getFloat("unit_price"));
-            products.add(product);
-        }
-        return products;
+    public static List<Product> findByName(Statement stmt, String name) throws SQLException {
+        String query = "SELECT product_id,product_name,stock_amount,unit_price FROM product WHERE " +
+                        "product_name LIKE '%" + name + "%'";
+
+        ResultSet rs = stmt.executeQuery(query);
+        return getListOfProducts(rs);
     }
     
     public  void setSpecific(Statement stmt,Long id) throws SQLException {
@@ -131,4 +122,51 @@ public class Product {
       
     }
 
+    public static List<Product> sortByName(Statement stmt) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY product_name ASC");
+        return getListOfProducts(rs);
+    }
+
+    public static List<Product> sortByPrice(Statement stmt) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY unit_price ASC");
+        return getListOfProducts(rs);
+    }
+
+    public static List<Product> findByCategory(Statement stmt, String category) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,category"+
+                "WHERE category.category_id = product.category_id AND category.category_name = "+ category);
+        return getListOfProducts(rs);
+    }
+
+    public static List<Product> findByPublisher(Statement stmt, String publisher) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,publisher"+
+                "WHERE publisher.publisher_id = product.publisher_id AND publisher.publisher_name = '"+ publisher + "'");
+        return getListOfProducts(rs);
+    }
+
+    public static List<Product> findByCategory(Statement stmt, String category) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,category"+
+                "WHERE category.category_id = product.category_id AND category.category_name = "+ category);
+        return getListOfProducts(rs);
+    }
+
+    public static List<Product> getListOfProducts(ResultSet rs) throws SQLException {
+        List<Product> products = new ArrayList<Product>();
+        // Fetch each row from the result set
+        while (rs.next())
+        {
+            Product product = new Product();
+            int amount = rs.getInt("stock_amount");
+            if (amount > 0)
+                product.setAmount(amount);
+            else
+                continue;
+            product.setId(rs.getInt("product_id"));
+            product.setName(rs.getString("product_name"));
+            product.setPrice(rs.getFloat("unit_price"));
+            products.add(product);
+        }
+        return products;
+
+    }
 }

@@ -1,12 +1,12 @@
 package controllers;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import models.Category;
 import models.Product;
 import models.Publisher;
+import play.mvc.Security;
 import views.html.*;
 import models.User;
 import play.mvc.Controller;
@@ -49,18 +49,23 @@ public class Application extends Controller {
             flash("error", "Incorrect username or password.");
             return redirect(routes.Application.index());
         }
-            User example = new User();
-            example.set_EmployeeClass(getDBConnection(),username);
+        User user = new User();
+        user.set_EmployeeClass(getDBConnection(),username);
+        session("username", user.getUsername());
         List <Product> products = Product.findAllAvailable(getDBConnection());
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
-            connection.close();
-           
-           
-            return ok(views.html.inventory.render(example,products,publishers,categories));
+        connection.close();
+        return ok(views.html.inventory.render(products,publishers,categories));
         }
 
+    public static Result logout(){
+        session().remove("username");
+        return redirect(routes.Application.index());
+    }
+
     //future product description page
+    @Security.Authenticated(UserAuth.class)
     public static Result show(long id) throws SQLException {
 
         Product productos = new  Product(); //findSpecific(getDBConnection(), id);
@@ -68,11 +73,37 @@ public class Application extends Controller {
           return ok(views.html.product.render(productos));
       }
 
+    @Security.Authenticated(UserAuth.class)
+    public static Result search() throws SQLException {
+        String search = "";
+        DynamicForm dataForm = Form.form().bindFromRequest();
+        search = dataForm.data().get("search");
+        List <Product> products = Product.findByName(getDBConnection(),search);
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        return ok(views.html.inventory.render(products,publishers,categories));
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result sortByName() throws SQLException {
+        List <Product> products = Product.sortByName(getDBConnection());
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        return ok(views.html.inventory.render(products,publishers,categories));
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result sortByPrice() throws SQLException {
+        List <Product> products = Product.sortByPrice(getDBConnection());
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        return ok(views.html.inventory.render(products,publishers,categories));
+    }
+
     public static Statement getDBConnection() throws SQLException {
         DataSource ds = DB.getDataSource();
         connection = ds.getConnection();
         return connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-
     }
 
     }

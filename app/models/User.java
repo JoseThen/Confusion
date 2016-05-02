@@ -66,6 +66,7 @@ public class User {
         return Password;
     }
 
+    //check if user with this username and password exists in our database
     public static boolean isLogin(Statement st, String userName, String password) throws SQLException {
         String query = String.format(
                 "SELECT count(*) FROM employee WHERE " +
@@ -106,6 +107,7 @@ public class User {
             		phone = welcomer.getString("phone");
             		dob = welcomer.getDate("dob");
             		}
+                    setUsername(empname);
             		setEmployeeName(realName);
             		setStreet(street);
             		setCity(city);
@@ -115,7 +117,5 @@ public class User {
             		setPhone(phone);
             		setDob(dob);
 }
-
-
 
 }
