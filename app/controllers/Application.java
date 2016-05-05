@@ -65,12 +65,14 @@ public class Application extends Controller {
     }
 
     //future product description page
+    // as you can see I used spanish objects hahhaha
     @Security.Authenticated(UserAuth.class)
     public static Result show(long id) throws SQLException {
-
-        Product productos = new  Product(); //findSpecific(getDBConnection(), id);
+    	Publisher publicador = new Publisher();
+        Product productos = new  Product(); 
         productos.setSpecific(getDBConnection(), id);
-          return ok(views.html.product.render(productos));
+        publicador.findPublisher(getDBConnection(), (int) id);
+          return ok(views.html.product.render(productos, publicador));
       }
 
     @Security.Authenticated(UserAuth.class)

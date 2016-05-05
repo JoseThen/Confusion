@@ -8,10 +8,37 @@ import java.util.List;
 
 public class Publisher {
 
-
+	private int id ;
     private String name;
     private String country;
+    private String yearStarted;
+	private String pubDescription;
+	
+	
+    
+	public int getId() {
+		 return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getYearStarted() {
+		return yearStarted;
+	}
+
+	public void setYearStarted(String yearStarted) {
+		this.yearStarted = yearStarted;
+	}
+
+	public String getPubDescription() {
+		return pubDescription;
+	}
+
+	public void setPubDescription(String pubDescription) {
+		this.pubDescription = pubDescription;
+	}
 
     public String getCountry() {
         return country;
@@ -44,4 +71,26 @@ public class Publisher {
         }
         return publishers;
     }
+    
+    public  void findPublisher(Statement stmt,int id) throws SQLException {
+
+        //List<Product> products = new ArrayList<Product>();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM publisher where publisher_id = " + id);
+        //Product product = new Product();
+        // Fetch each row from the result set
+        while (rs.next())
+        {
+           
+            
+            setId(rs.getInt("publisher_id"));
+            setPubDescription(rs.getString("publisher_description"));
+            setYearStarted(rs.getString("establishing_year"));
+            setName(rs.getString("establishing_year"));
+            setCountry(rs.getString("country_of_origin")); 
+            
+            
+            
+        }
+    
+}
 }
