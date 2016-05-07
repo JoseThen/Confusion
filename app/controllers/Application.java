@@ -75,6 +75,7 @@ public class Application extends Controller {
         Product productos = new  Product(); 
         productos.setSpecific(getDBConnection(), id);
         publicador.findPublisher(getDBConnection(), (int) id);
+        connection.close();
           return ok(views.html.product.render(productos, publicador));
       }
 
@@ -86,6 +87,7 @@ public class Application extends Controller {
         List <Product> products = Product.findByName(getDBConnection(),search);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
@@ -94,6 +96,7 @@ public class Application extends Controller {
         List <Product> products = Product.sortByName(getDBConnection(), order);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
@@ -102,6 +105,7 @@ public class Application extends Controller {
         List <Product> products = Product.sortByPrice(getDBConnection(), order);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
@@ -110,6 +114,7 @@ public class Application extends Controller {
         List <Product> products = Product.findByPublisher(getDBConnection(), pubId);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
@@ -118,6 +123,7 @@ public class Application extends Controller {
         List <Product> products = Product.findByCategory(getDBConnection(), categoryId);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
