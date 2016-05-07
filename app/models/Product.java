@@ -122,25 +122,27 @@ public class Product {
       
     }
 
-    public static List<Product> sortByName(Statement stmt) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY product_name ASC");
+    public static List<Product> sortByName(Statement stmt, String order) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY product_name " + order);
         return getListOfProducts(rs);
     }
 
-    public static List<Product> sortByPrice(Statement stmt) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY unit_price ASC");
+    public static List<Product> sortByPrice(Statement stmt, String order) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product ORDER BY unit_price " + order);
         return getListOfProducts(rs);
     }
 
-    public static List<Product> findByCategory(Statement stmt, String category) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,category"+
-                "WHERE category.category_id = product.category_id AND category.category_name = "+ category);
+    public static List<Product> findByCategory(Statement stmt, Long categoryId) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product p,category c "+
+                "WHERE c.category_id = p.category_id AND c.category_id = "+ categoryId);
+//        String q = "SELECT product_id,product_name,stock_amount,unit_price FROM product,category WHERE category.category_id = product.category_id AND category.category_id = " + categoryId;
+//        ResultSet rs = stmt.executeQuery(q);
         return getListOfProducts(rs);
     }
 
-    public static List<Product> findByPublisher(Statement stmt, String publisher) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,publisher"+
-                "WHERE publisher.publisher_id = product.publisher_id AND publisher.publisher_name = '"+ publisher + "'");
+    public static List<Product> findByPublisher(Statement stmt, Long publisherId) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product,publisher "+
+                "WHERE publisher.publisher_id = product.publisher_id AND publisher.publisher_id = "+ publisherId);
         return getListOfProducts(rs);
     }
 

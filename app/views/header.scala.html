@@ -1,0 +1,14 @@
+@(currentuser:User = actions.CurrentUser.currentUser())
+
+<div class ="row">
+    <img src='@routes.Assets.at("images/gamegonew.png")' class= "img-responsive logo" >
+    <h1 class = "pull-left title-color brand">  GameGo Inventory  </h1>
+    @if(currentuser!=null){
+    <ul class="nav navbar-nav navbar-right">
+        <li class = "link"><h4><span class="glyphicon glyphicon-user"></span>You're now logged in as @currentuser.getEmployeeName()</h4></li>
+        <li><a href="@routes.Application.logout()"><h4><span class="glyphicon glyphicon-log-out"></span> Log Out</h4></a></li>
+    </ul>
+    }
+
+</div>
+<hr class="title-color">

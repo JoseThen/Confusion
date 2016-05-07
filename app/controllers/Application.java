@@ -24,7 +24,10 @@ public class Application extends Controller {
     public static Connection connection;
 
     public static Result index() {
-        return ok(views.html.index.render("Confusion Inventory"));
+        if (session().get("username") != null){
+            session().remove("username");
+        }
+        return ok(views.html.index.render("GameGo Inventory"));
     }
 
     public static Result login() throws SQLException {
@@ -87,16 +90,32 @@ public class Application extends Controller {
     }
 
     @Security.Authenticated(UserAuth.class)
-    public static Result sortByName() throws SQLException {
-        List <Product> products = Product.sortByName(getDBConnection());
+    public static Result sortByName(String order) throws SQLException {
+        List <Product> products = Product.sortByName(getDBConnection(), order);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
         return ok(views.html.inventory.render(products,publishers,categories));
     }
 
     @Security.Authenticated(UserAuth.class)
-    public static Result sortByPrice() throws SQLException {
-        List <Product> products = Product.sortByPrice(getDBConnection());
+    public static Result sortByPrice(String order) throws SQLException {
+        List <Product> products = Product.sortByPrice(getDBConnection(), order);
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        return ok(views.html.inventory.render(products,publishers,categories));
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result findByPublisher(Long pubId) throws SQLException {
+        List <Product> products = Product.findByPublisher(getDBConnection(), pubId);
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        return ok(views.html.inventory.render(products,publishers,categories));
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result findByCategory(Long categoryId) throws SQLException {
+        List <Product> products = Product.findByCategory(getDBConnection(), categoryId);
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
         return ok(views.html.inventory.render(products,publishers,categories));

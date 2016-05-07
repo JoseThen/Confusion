@@ -265,8 +265,8 @@ div.table-title {
 }
 
 th {
-  color:#D5DDE5;;
-  background:#1b1e24;
+  color:#D5DDE5;
+  background:#5E7d7e;
   border-bottom:4px solid #9ea7af;
   border-right: 1px solid #343a45;
   font-size:23px;
@@ -453,3 +453,37 @@ td.text-right {
   }
 }
 
+.link{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.margin-top{
+    margin-top: 45px;
+}
+
+.selecto{
+    display:inline;
+    width:25%;
+}
+
+.main-color{
+    background:  #5E7d7e;
+}
+
+.logo{
+    width:10%
+}
+
+.title-color{
+    color:  #5E7d7e;
+
+}
+.logo{
+    float: left;
+}
+
+.brand{
+    margin-top: 60px;
+    font-size: 4em;
+}

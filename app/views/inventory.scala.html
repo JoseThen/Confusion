@@ -1,10 +1,11 @@
 @(products: List[Product], publishers: List[Publisher], categories: List[Category])
 
 @main("Welcome Back")    {
-
+@header()
 <div>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+
+    <div class="row margin-top">
+        <div class="col-md-8 ">
             <div id="custom-search-input">
                 <form action="@routes.Application.search()" method="get">
                 <div class="input-group col-md-12">
@@ -18,9 +19,21 @@
                 </div>
                 </form>
             </div>
-            <a href="@routes.Application.sortByName()"><span class="glyphicon glyphicon-by-attributes"></span> Sort Games By Name</a>
-            <a href="@routes.Application.sortByPrice()"><span class="glyphicon glyphicon-by-attributes"></span> Sort Games By Price</a>
         </div>
+        <div class="form-group">
+                <label for="sel1">Sort By Name:</label>
+                <select class="form-control selecto" id="sel1" onchange="sortName(value);">
+                    <option value="1">A - Z</option>
+                    <option value="2">Z - A</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sel2">Sort By Price:</label>
+                <select class="form-control selecto" id="sel2" onchange="sortPrice(value);">
+                    <option value="1">min - max</option>
+                    <option value="2">max - min</option>
+                </select>
+            </div>
     </div>
     <br/><br/>
 </div>
@@ -31,14 +44,12 @@
                  class="col-xs-6 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
 
                 <div>
-                    <h4 data-toggle="collapse" data-target="#group-1">
-                        <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                        <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                        Categories
-                    </h4>
+                    <div class="list-group-item main-color">
+                        <h4> Categories </h4>
+                    </div>
                     <div id="group-1" class="list-group collapse in">
                         @for(c<- categories){
-                        <a class="list-group-item" href="#">
+                        <a class="list-group-item" href="@routes.Application.findByCategory(c.getId())">
                             <span class="badge"></span> @c.getName()
                         </a>
                        }
@@ -46,14 +57,12 @@
                 </div>
 
                 <div>
-                    <h4 data-toggle="collapse" data-target="#group-2">
-                        <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                        <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                        Publishers
-                    </h4>
+                    <div class="list-group-item main-color">
+                        <h4 >Publishers </h4>
+                    </div>
                     <div id="group-2" class="list-group collapse in">
                         @for(pub<- publishers){
-                        <a class="list-group-item" href="#">
+                        <a class="list-group-item" href="@routes.Application.findByPublisher(pub.getId())">
                             <span class="badge"></span> @pub.getName()
                         </a>
                         }

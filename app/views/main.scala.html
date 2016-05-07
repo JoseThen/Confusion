@@ -14,10 +14,6 @@
 
 <div class="wrapper">
     <div class="container">
-        @if(currentuser!=null){
-            <a href="@routes.Application.logout()"><span class="glyphicon glyphicon-log-out"></span> Log Out</a>
-            <h1>Welcome back @currentuser.getEmployeeName()</h1>
-        }
         @* Display flash messages *@
         @if(flash.containsKey("success")) {
         <p>Success Flash Message:</p>
@@ -27,6 +23,7 @@
         <p>Error Flash Message:</p>
         @flash.get("error")
         }
+
         @content
 
         <ul class="bg-bubbles">

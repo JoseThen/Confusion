@@ -7,8 +7,12 @@ POST    /login                      controllers.Application.login()
 GET     /logout                     controllers.Application.logout()
 
 GET     /search                     controllers.Application.search()
-GET     /sort/name                  controllers.Application.sortByName()
-GET     /sort/price                 controllers.Application.sortByPrice()
+GET     /search/publisher           controllers.Application.findByPublisher(id:Long)
+GET     /search/category            controllers.Application.findByCategory(id:Long)
+GET     /sort/name/asc                  controllers.Application.sortByName(order: String ?= "ASC")
+GET     /sort/name/desc                  controllers.Application.sortByName(order: String ?= "DESC")
+GET     /sort/price/asc                 controllers.Application.sortByPrice(order: String ?= "ASC")
+GET     /sort/price/desc                 controllers.Application.sortByPrice(order: String ?= "DESC")
 
 GET     /inventory/:id              controllers.Application.show(id:Long)
 

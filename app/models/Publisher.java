@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Publisher {
 
-	private int id ;
+
+    private int id;
     private String name;
     private String country;
     private String yearStarted;
@@ -59,13 +60,13 @@ public class Publisher {
     public static List<Publisher> findAll(Statement stmt) throws SQLException {
 
         List<Publisher> publishers = new ArrayList<Publisher>();
-        ResultSet rs = stmt.executeQuery("SELECT publisher_name FROM publisher");
+        ResultSet rs = stmt.executeQuery("SELECT publisher_name, publisher_id FROM publisher");
 
         // Fetch each row from the result set
         while (rs.next())
         {
             Publisher p = new Publisher();
-//            p.setId(rs.getInt("publisher_id"));
+            p.setId(rs.getInt("publisher_id"));
             p.setName(rs.getString("publisher_name"));
             publishers.add(p);
         }
