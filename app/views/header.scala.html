@@ -1,7 +1,7 @@
 @(currentuser:User = actions.CurrentUser.currentUser())
 
 <div class ="row">
-    <img src='@routes.Assets.at("images/gamegonew.png")' class= "img-responsive logo" >
+    <img src='@routes.Assets.at("images/gamegonew.png")' class= "img-responsive logo" style="width:60px;" >
     <h1 class = "pull-left title-color brand">  GameGo Inventory  </h1>
     @if(currentuser!=null){
     <ul class="nav navbar-nav navbar-right">
