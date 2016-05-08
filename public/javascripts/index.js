@@ -7,7 +7,7 @@
 	 setTimeout(function(){ document.getElementById("hope").submit(); }, 2000);
 });
 
-function sortName($i){ 
+function sortName($i){
     if ($i == "1"){
         var s = '/sort/name/asc';
     }else{

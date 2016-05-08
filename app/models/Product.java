@@ -1,5 +1,7 @@
 package models;
 
+import controllers.Application;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,20 +14,26 @@ public class Product {
     private String name;
     private String description;
     private float price;
-    private String version;
+    private String platform;
     private int amount;
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    private int categoryId;
-//    private Category category;
+    private Category category;
     private Publisher publisher;
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public int getId() {
         return id;
@@ -59,14 +67,6 @@ public class Product {
         this.price = price;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
     public String getFormattedAmount() {
         return "$" + amount;
     }
@@ -87,6 +87,10 @@ public class Product {
         this.publisher = publisher;
     }
 
+    public static void delete(Statement stmt, Long productId) throws SQLException {
+        stmt.executeUpdate("DELETE FROM product WHERE product_id =" + productId);
+    }
+
     public static List<Product> findAllAvailable(Statement stmt) throws SQLException {
         ResultSet rs = stmt.executeQuery("SELECT product_id,product_name,stock_amount,unit_price FROM product");
         return getListOfProducts(rs);
@@ -101,23 +105,23 @@ public class Product {
     }
     
     public  void setSpecific(Statement stmt,Long id) throws SQLException {
-
-        //List<Product> products = new ArrayList<Product>();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM product where product_id = " + id);
-        //Product product = new Product();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM product p,category c where c.category_id = p.category_id and product_id = " + id);
         // Fetch each row from the result set
         while (rs.next())
         {
-           
-            
             setId(rs.getInt("product_id"));
             setName(rs.getString("product_name"));
             setPrice(rs.getFloat("unit_price"));
             setDescription(rs.getString("product_description"));
-            setAmount(rs.getInt("stock_amount")); 
-            
-            
-            
+            setAmount(rs.getInt("stock_amount"));
+            setPlatform(rs.getString("platform"));
+            Category c = new Category();
+            c.setId(rs.getInt("category_id"));
+            c.setName(rs.getString("category_name"));
+            setCategory(c);
+            Publisher pub = new Publisher();
+            pub.findPublisher(Application.getDBConnection(),(long)rs.getInt("publisher_id"));
+            setPublisher(pub);
         }
       
     }

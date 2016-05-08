@@ -1,0 +1,41 @@
+@(product: models.Product, publishers : models.Publisher, isManager : Boolean)
+
+@main("Product"){
+
+
+<div>
+    <p>@product.getName()<br>
+        @product.getPrice()<br>
+        @product.getDescription()<br>
+        @if(product.getAmount() > 0 ){
+        <h> IN STOCK</h>
+        }
+    </p>
+
+    <p>@publishers.getName() </p>
+    <p>@publishers.getPubDescription() </p>
+    <p>@publishers.getCountry() </p>
+    <p>@publishers.getId() </p>
+    <p>@publishers.getYearStarted() </p>
+
+    @if(isManager == true){
+    <div class="row">
+        <div class="col-md-12">
+            <hr>
+            <button class="btn btn-default pull-right"
+                    onclick="window.location.href='@routes.Application.edit(product.getId())'"><i
+                    class="glyphicon glyphicon-pencil"></i> Edit
+            </button>
+            <button class="btn btn-default pull-right"
+                    onclick="window.location.href='@routes.Application.delete(product.getId())'"><i
+                    class="glyphicon glyphicon-minus"></i> Delete
+            </button>
+        </div>
+    </div>
+    }
+
+
+</div>
+
+
+}

@@ -55,12 +55,16 @@ public class Application extends Controller {
         User user = new User();
         user.set_EmployeeClass(getDBConnection(),username);
         session("username", user.getUsername());
+        return redirect(routes.Application.showAll());
+        }
+
+    public static Result showAll() throws SQLException {
         List <Product> products = Product.findAllAvailable(getDBConnection());
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
         connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
-        }
+    }
 
     public static Result logout(){
         session().remove("username");
@@ -74,9 +78,10 @@ public class Application extends Controller {
     	Publisher publicador = new Publisher();
         Product productos = new  Product(); 
         productos.setSpecific(getDBConnection(), id);
-        publicador.findPublisher(getDBConnection(), (int) id);
+        publicador.findPublisher(getDBConnection(), (long)productos.getPublisher().getId());
+        User user = actions.CurrentUser.currentUser();
         connection.close();
-          return ok(views.html.product.render(productos, publicador));
+        return ok(views.html.product.product.render(productos, publicador, user.getRole().equals("Manager")));
       }
 
     @Security.Authenticated(UserAuth.class)
@@ -126,6 +131,40 @@ public class Application extends Controller {
         connection.close();
         return ok(views.html.inventory.render(products,publishers,categories));
     }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result delete(Long productId) throws SQLException {
+        User user = actions.CurrentUser.currentUser();
+        if (!user.getRole().equals("Manager")){
+            flash("error", "You have no privileges to perform this action");
+        }else{
+            Product.delete(getDBConnection(),productId);
+        }
+        connection.close();
+        return redirect(routes.Application.showAll());
+    }
+    @Security.Authenticated(UserAuth.class)
+    public static Result edit(Long productId) throws SQLException {
+        Product product = new  Product();
+        product.setSpecific(getDBConnection(), productId);
+        List <Publisher> publishers = Publisher.findAll(getDBConnection());
+        List <Category> categories = Category.findAll(getDBConnection());
+        connection.close();
+        return ok(views.html.product.edit.render(product, publishers, categories));
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result update(Long productId) throws SQLException {
+        User user = actions.CurrentUser.currentUser();
+        if (!user.getRole().equals("Manager")){
+            flash("error", "You have no privileges to perform this action");
+        }else{
+            //update db record
+        }
+        connection.close();
+        return redirect(routes.Application.show(productId));
+    }
+
 
     public static Statement getDBConnection() throws SQLException {
         DataSource ds = DB.getDataSource();

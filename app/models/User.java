@@ -13,6 +13,15 @@ public class User {
     private String Street, City, State, Email, Phone;
     private int Zip;
     private Date Dob;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public void setStreet(String street){
     	this.Street = street;
@@ -85,7 +94,7 @@ public class User {
  // this method sets all of the variables pertaining to this class except for password
     public void set_EmployeeClass(Statement st, String empname)throws SQLException{
 
-    			String first = "SELECT * FROM employee where user_name ='" + empname + "'";
+    			String first = "SELECT * FROM employee e,role_table r where e.role_id = r.role_id and user_name ='" + empname + "'";
     			String realName = null;
     			String street = null;
     			String city = null;
@@ -94,6 +103,7 @@ public class User {
     			String email = null;
     			String phone = null;
     			Date dob = null;
+                String title = "";
 
 
     			ResultSet welcomer = st.executeQuery(first);
@@ -106,6 +116,7 @@ public class User {
             		email = welcomer.getString("email");
             		phone = welcomer.getString("phone");
             		dob = welcomer.getDate("dob");
+                    title = welcomer.getString("role_title");
             		}
                     setUsername(empname);
             		setEmployeeName(realName);
@@ -116,6 +127,7 @@ public class User {
             		setEmail(email);
             		setPhone(phone);
             		setDob(dob);
+                    setRole(title);
 }
 
 }

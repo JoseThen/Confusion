@@ -13,33 +13,32 @@ public class Publisher {
     private String name;
     private String country;
     private String yearStarted;
-	private String pubDescription;
-	
-	
-    
-	public int getId() {
-		 return id;
-	}
+    private String pubDescription;
 
-	public void setId(int id) {
-		this.id = id;
-	}
 
-	public String getYearStarted() {
-		return yearStarted;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setYearStarted(String yearStarted) {
-		this.yearStarted = yearStarted;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getPubDescription() {
-		return pubDescription;
-	}
+    public String getYearStarted() {
+        return yearStarted;
+    }
 
-	public void setPubDescription(String pubDescription) {
-		this.pubDescription = pubDescription;
-	}
+    public void setYearStarted(String yearStarted) {
+        this.yearStarted = yearStarted;
+    }
+
+    public String getPubDescription() {
+        return pubDescription;
+    }
+
+    public void setPubDescription(String pubDescription) {
+        this.pubDescription = pubDescription;
+    }
 
     public String getCountry() {
         return country;
@@ -63,8 +62,7 @@ public class Publisher {
         ResultSet rs = stmt.executeQuery("SELECT publisher_name, publisher_id FROM publisher");
 
         // Fetch each row from the result set
-        while (rs.next())
-        {
+        while (rs.next()) {
             Publisher p = new Publisher();
             p.setId(rs.getInt("publisher_id"));
             p.setName(rs.getString("publisher_name"));
@@ -72,26 +70,18 @@ public class Publisher {
         }
         return publishers;
     }
-    
-    public  void findPublisher(Statement stmt,int id) throws SQLException {
 
-        //List<Product> products = new ArrayList<Product>();
+    public void findPublisher(Statement stmt, Long id) throws SQLException {
+
         ResultSet rs = stmt.executeQuery("SELECT * FROM publisher where publisher_id = " + id);
-        //Product product = new Product();
         // Fetch each row from the result set
-        while (rs.next())
-        {
-           
-            
+        while (rs.next()) {
             setId(rs.getInt("publisher_id"));
             setPubDescription(rs.getString("publisher_description"));
             setYearStarted(rs.getString("establishing_year"));
-            setName(rs.getString("establishing_year"));
-            setCountry(rs.getString("country_of_origin")); 
-            
-            
-            
+            setName(rs.getString("publisher_name"));
+            setCountry(rs.getString("country_of_origin"));
         }
-    
-}
+
+    }
 }
