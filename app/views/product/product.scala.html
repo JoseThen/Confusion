@@ -1,22 +1,42 @@
 @(product: models.Product, publishers : models.Publisher, isManager : Boolean)
 
-@main("Product"){
-
+@main("Product Detail"){
+@header()
 
 <div>
-    <p>@product.getName()<br>
-        @product.getPrice()<br>
-        @product.getDescription()<br>
+<div class="col-md-4" style="height:inherit !important;">
+<img src="http://adrianhindes.com/wp-content/uploads/2015/11/Fallout-4-cover-art.jpg" class="img-responsive" alt="Responsive image">
+</div>
+</div>
+<div class="col-md-5">
+<ul class="nav nav-tabs" style="font-size:large !important;">
+  <li class="active"><a style="color:#38318F; font-weight:600;" href="#product" data-toggle="tab" aria-expanded="false">Product</a></li>
+  <li class=""><a style="color:#38318F; font-weight:600;" href="#publisher" data-toggle="tab" aria-expanded="true">@publishers.getName()</a></li>
+ 
+ 
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="product">
+    <p style="font-size:large !important;">@product.getDescription()</p>
+  </div>
+  <div class="tab-pane fade  in" id="publisher">
+    <p style="font-size:large !important;">@publishers.getCountry() : @publishers.getYearStarted()<br>
+     @publishers.getPubDescription()</p>
+  </div>
+ 
+</div>
+</div>
+
+    <h1>@product.getName()</h1><br>
+    	
+       <h1>Price : @product.getPrice()</h1> <br>
+        
         @if(product.getAmount() > 0 ){
-        <h> IN STOCK</h>
+        <button type="button" class="btn btn-primary btn-lg  btn-succecss">IN STOCK : @product.getAmount()</button>
+        
+        }else {<button type="button" class="btn  btn-primary btn-lg btn-danger">OUT OF STOCK</button>
         }
     </p>
-
-    <p>@publishers.getName() </p>
-    <p>@publishers.getPubDescription() </p>
-    <p>@publishers.getCountry() </p>
-    <p>@publishers.getId() </p>
-    <p>@publishers.getYearStarted() </p>
 
     @if(isManager == true){
     <div class="row">
@@ -34,8 +54,6 @@
     </div>
     }
 
-
-</div>
 
 
 }
