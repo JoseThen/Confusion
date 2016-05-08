@@ -2,53 +2,61 @@
 
 @main("Product"){
     @header()
-    <form class="form-horizontal" action="@routes.Application.update(product.getId())" method="post" role="form">
+    <form class="form-horizontal" @if(product!=null){action="@routes.Application.update(product.getId())"}else{action="@routes.Application.update()"} method="post" role="form">
         <div class="form-group">
             <label class="col-md-3 control-label">Game name: *</label>
             <div class="col-md-8">
-                <input class="form-control" type="text" name="name" value="@product.getName()">
+                <input class="form-control" type="text" name="name" @if(product!=null){value="@product.getName()"}>
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-3 control-label">Game Description: *</label>
             <div class="col-md-8">
-                <textarea rows="12" cols="50" class="form-control" type="text" name="description">@product.getDescription() </textarea>
+                <textarea rows="12" cols="50" class="form-control" type="text" name="description">@if(product!=null){@product.getDescription()} </textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-3 control-label">Game Price: *</label>
             <div class="col-md-8">
-                <input class="form-control decimal" type="text" value="@product.getPrice()" name="price">
+                <input class="form-control decimal" type="text" @if(product!=null){value="@product.getPrice()"} name="price">
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-3 control-label">Game Version:</label>
             <div class="col-md-8">
-                <input class="form-control" type="text" value="@product.getPlatform()" name="platform">
+                <input class="form-control" type="text" @if(product!=null){value="@product.getPlatform()"} name="platform">
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-3 control-label">Amount in stock:</label>
             <div class="col-md-8">
-                <input class="form-control" type="number" value="@product.getAmount()" name="amount">
+                <input class="form-control" type="number" @if(product!=null){value="@product.getAmount()"} name="amount">
             </div>
         </div>
         <div class="form-group">
-            <label for="sel1">Choose category:</label>
+            <label for="sel1">Choose category*:</label>
             <select class="form-control selecto" id="sel1" name="category">
-                <option value="@product.getCategory().getId()">@product.getCategory().getName()</option>
+                @if(product!=null){
+                    <option value="@product.getCategory().getId()">@product.getCategory().getName()</option>
+                }else{
+                    <option value="0"> </option>
+                }
                 @for(c <- categories){
-                    @if(c.getId() == product.getCategory().getId()){continue}
+                    @if(product!=null){@if(c.getId() == product.getCategory().getId()){continue;}}
                         <option value="@c.getId()">@c.getName()</option>
                 }
             </select>
         </div>
         <div class="form-group">
-            <label for="sel2">Choose publisher:</label>
+            <label for="sel2">Choose publisher*:</label>
             <select class="form-control selecto" id="sel2" name="publisher">
-                <option value="@product.getCategory().getId()">@product.getPublisher().getName()</option>
+                @if(product!=null){
+                    <option value="@product.getCategory().getId()">@product.getPublisher().getName()</option>
+                }else{
+                    <option value="0"> </option>
+                }
                 @for(p <- publishers){
-                @if(p.getId() == product.getPublisher().getId()){continue}
+                @if(product!=null){@if(p.getId() == product.getPublisher().getId()){continue}}
                     <option value="@p.getId()">@p.getName()</option>
                 }
             </select>
@@ -58,7 +66,7 @@
             <div class="col-md-8">
                 <input type="submit" class="btn btn-primary" value="Save Changes">
                 <span></span>
-                <input type="reset" class="btn btn-default" onclick="window.location.href='@routes.Application.show(product.getId())'"
+                <input type="reset" class="btn btn-default" @if(product!=null){onclick="window.location.href='@routes.Application.show(product.getId())'}else{onclick="window.location.href='@routes.Application.showAll()'}"
                        value="Cancel">
             </div>
         </div>

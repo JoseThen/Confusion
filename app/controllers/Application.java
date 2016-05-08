@@ -146,7 +146,11 @@ public class Application extends Controller {
     @Security.Authenticated(UserAuth.class)
     public static Result edit(Long productId) throws SQLException {
         Product product = new  Product();
-        product.setSpecific(getDBConnection(), productId);
+        if (productId!=null) {
+            product.setSpecific(getDBConnection(), productId);
+        }else{
+            product = null;
+        }
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
         connection.close();
@@ -160,31 +164,37 @@ public class Application extends Controller {
             flash("error", "You have no privileges to perform this action");
         }else {
             Product product = new  Product();
-            product.setSpecific(getDBConnection(), productId);
+            if (productId!=null) {
+                product.setSpecific(getDBConnection(), productId);
+            }
             DynamicForm dForm = Form.form().bindFromRequest();
             //change details and save.
             String name = dForm.data().get("name");
             String description = dForm.data().get("description");
             String price = dForm.data().get("price");
-            if (name == "" || description == "" || price == "") {
+            int categoryId = Integer.parseInt(dForm.data().get("category"));
+            int publisherId = Integer.parseInt(dForm.data().get("publisher"));
+            if (name == "" || description == "" || price == "" || categoryId == 0 || publisherId == 0) {
                 flash("error", "Required fields cannot be empty");
-                return redirect(routes.Application.edit(product.getId()));
+                return redirect(routes.Application.edit(productId));
             } else {
                 float priceNumb = Float.parseFloat(dForm.data().get("price"));
                 String platform = dForm.data().get("platform");
                 int amount = Integer.parseInt(dForm.data().get("amount"));
-                int categoryId = Integer.parseInt(dForm.data().get("category"));
-                int publisherId = Integer.parseInt(dForm.data().get("publisher"));
                 product.setName(name);
                 product.setPrice(priceNumb);
                 product.setDescription(description);
                 product.setAmount(amount);
                 product.setPlatform(platform);
-                product.update(getDBConnection(),categoryId, publisherId);
+                if(product.getId()!= null) {
+                    product.update(getDBConnection(), categoryId, publisherId);
+                }else{
+                    product.add(getDBConnection(), categoryId, publisherId);
+                }
                 connection.close();
             }
         }
-        return redirect(routes.Application.show(productId));
+        return redirect(productId!= null ?routes.Application.show(productId) : routes.Application.showAll());
     }
 
 

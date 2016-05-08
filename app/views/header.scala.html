@@ -9,6 +9,16 @@
         <li><a href="@routes.Application.logout()"><h4><span class="glyphicon glyphicon-log-out"></span> Log Out</h4></a></li>
     </ul>
     }
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
+    @if(currentuser!=null && currentuser.getRole().equals("Manager")){
+    <input type="reset" class="btn btn-primary pull-right" onclick="window.location.href='@routes.Application.edit()'"
+           value="Add Inventory">
+    }
 </div>
 <hr class="title-color">

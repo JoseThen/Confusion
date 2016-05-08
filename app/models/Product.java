@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Product {
 
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private float price;
@@ -35,11 +35,11 @@ public class Product {
         this.category = category;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -109,7 +109,7 @@ public class Product {
         // Fetch each row from the result set
         while (rs.next())
         {
-            setId(rs.getInt("product_id"));
+            setId(rs.getLong("product_id"));
             setName(rs.getString("product_name"));
             setPrice(rs.getFloat("unit_price"));
             setDescription(rs.getString("product_description"));
@@ -161,7 +161,7 @@ public class Product {
                 product.setAmount(amount);
             else
                 continue;
-            product.setId(rs.getInt("product_id"));
+            product.setId(rs.getLong("product_id"));
             product.setName(rs.getString("product_name"));
             product.setPrice(rs.getFloat("unit_price"));
             products.add(product);
@@ -176,5 +176,11 @@ public class Product {
                 ", product_description = \"" + getDescription() + "\",platform =\"" + getPlatform() +
                 "\", category_id =" + categoryId + ", publisher_id =" + publisherId +
                 " WHERE product_id =" + getId());
+    }
+
+    public void add(Statement stmt, int categoryId, int publisherId) throws SQLException {
+        stmt.executeUpdate("INSERT INTO product(product_name, product_description,unit_price,platform, stock_amount,category_id, publisher_id) " +
+                " VALUES(\"" + getName() + "\" ,\"" + getDescription() + "\"," + getPrice() +",\""+ getPlatform()+"\","+
+                        getAmount() + "," + categoryId + "," + publisherId + ")");
     }
 }
