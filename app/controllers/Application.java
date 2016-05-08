@@ -6,6 +6,7 @@ import java.util.List;
 import models.Category;
 import models.Product;
 import models.Publisher;
+import play.Logger;
 import play.mvc.Security;
 import views.html.*;
 import models.User;
@@ -35,7 +36,6 @@ public class Application extends Controller {
         DynamicForm userForm = Form.form().bindFromRequest();
         String username = userForm.data().get("username");
         String password = userForm.data().get("password");
-
         if (username == "") {
             flash("error", "Missing Username");
             return redirect(routes.Application.index());
@@ -146,7 +146,11 @@ public class Application extends Controller {
     @Security.Authenticated(UserAuth.class)
     public static Result edit(Long productId) throws SQLException {
         Product product = new  Product();
-        product.setSpecific(getDBConnection(), productId);
+        if (productId!=null) {
+            product.setSpecific(getDBConnection(), productId);
+        }else{
+            product = null;
+        }
         List <Publisher> publishers = Publisher.findAll(getDBConnection());
         List <Category> categories = Category.findAll(getDBConnection());
         connection.close();
@@ -158,11 +162,39 @@ public class Application extends Controller {
         User user = actions.CurrentUser.currentUser();
         if (!user.getRole().equals("Manager")){
             flash("error", "You have no privileges to perform this action");
-        }else{
-            //update db record
+        }else {
+            Product product = new  Product();
+            if (productId!=null) {
+                product.setSpecific(getDBConnection(), productId);
+            }
+            DynamicForm dForm = Form.form().bindFromRequest();
+            //change details and save.
+            String name = dForm.data().get("name");
+            String description = dForm.data().get("description");
+            String price = dForm.data().get("price");
+            int categoryId = Integer.parseInt(dForm.data().get("category"));
+            int publisherId = Integer.parseInt(dForm.data().get("publisher"));
+            if (name == "" || description == "" || price == "" || categoryId == 0 || publisherId == 0) {
+                flash("error", "Required fields cannot be empty");
+                return redirect(routes.Application.edit(productId));
+            } else {
+                float priceNumb = Float.parseFloat(dForm.data().get("price"));
+                String platform = dForm.data().get("platform");
+                int amount = Integer.parseInt(dForm.data().get("amount"));
+                product.setName(name);
+                product.setPrice(priceNumb);
+                product.setDescription(description);
+                product.setAmount(amount);
+                product.setPlatform(platform);
+                if(product.getId()!= null) {
+                    product.update(getDBConnection(), categoryId, publisherId);
+                }else{
+                    product.add(getDBConnection(), categoryId, publisherId);
+                }
+                connection.close();
+            }
         }
-        connection.close();
-        return redirect(routes.Application.show(productId));
+        return redirect(productId!= null ?routes.Application.show(productId) : routes.Application.showAll());
     }
 
 

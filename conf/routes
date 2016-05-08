@@ -18,9 +18,9 @@ GET     /sort/price/asc             controllers.Application.sortByPrice(order: S
 GET     /sort/price/desc            controllers.Application.sortByPrice(order: String ?= "DESC")
 
 GET     /inventory/:id              controllers.Application.show(id:Long)
-GET	/inventory/:id/delete       controllers.Application.delete(id:Long)
-GET		/inventory/:id/edit		    controllers.Application.edit(id:Long)
-POST	/inventory/:id/update		controllers.Application.update(id:Long)
+GET	/inventory/:id/delete           controllers.Application.delete(id:Long)
+GET		/inventory/edit/		    controllers.Application.edit(id: java.lang.Long ?= null)
+POST	/inventory/update		controllers.Application.update(id: java.lang.Long ?= null)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
