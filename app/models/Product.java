@@ -169,4 +169,12 @@ public class Product {
         return products;
 
     }
+
+    public void update(Statement stmt, int categoryId, int publisherId) throws SQLException {
+        stmt.executeUpdate("UPDATE product SET product_name= \"" + getName() +
+                "\" ,stock_amount =" + getAmount() + ", unit_price =" +getPrice() +
+                ", product_description = \"" + getDescription() + "\",platform =\"" + getPlatform() +
+                "\", category_id =" + categoryId + ", publisher_id =" + publisherId +
+                " WHERE product_id =" + getId());
+    }
 }

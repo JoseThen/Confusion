@@ -6,6 +6,7 @@ import java.util.List;
 import models.Category;
 import models.Product;
 import models.Publisher;
+import play.Logger;
 import play.mvc.Security;
 import views.html.*;
 import models.User;
@@ -35,7 +36,6 @@ public class Application extends Controller {
         DynamicForm userForm = Form.form().bindFromRequest();
         String username = userForm.data().get("username");
         String password = userForm.data().get("password");
-
         if (username == "") {
             flash("error", "Missing Username");
             return redirect(routes.Application.index());
@@ -158,10 +158,32 @@ public class Application extends Controller {
         User user = actions.CurrentUser.currentUser();
         if (!user.getRole().equals("Manager")){
             flash("error", "You have no privileges to perform this action");
-        }else{
-            //update db record
+        }else {
+            Product product = new  Product();
+            product.setSpecific(getDBConnection(), productId);
+            DynamicForm dForm = Form.form().bindFromRequest();
+            //change details and save.
+            String name = dForm.data().get("name");
+            String description = dForm.data().get("description");
+            String price = dForm.data().get("price");
+            if (name == "" || description == "" || price == "") {
+                flash("error", "Required fields cannot be empty");
+                return redirect(routes.Application.edit(product.getId()));
+            } else {
+                float priceNumb = Float.parseFloat(dForm.data().get("price"));
+                String platform = dForm.data().get("platform");
+                int amount = Integer.parseInt(dForm.data().get("amount"));
+                int categoryId = Integer.parseInt(dForm.data().get("category"));
+                int publisherId = Integer.parseInt(dForm.data().get("publisher"));
+                product.setName(name);
+                product.setPrice(priceNumb);
+                product.setDescription(description);
+                product.setAmount(amount);
+                product.setPlatform(platform);
+                product.update(getDBConnection(),categoryId, publisherId);
+                connection.close();
+            }
         }
-        connection.close();
         return redirect(routes.Application.show(productId));
     }
 

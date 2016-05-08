@@ -4,21 +4,21 @@
     @header()
     <form class="form-horizontal" action="@routes.Application.update(product.getId())" method="post" role="form">
         <div class="form-group">
-            <label class="col-md-3 control-label">Game name:</label>
+            <label class="col-md-3 control-label">Game name: *</label>
             <div class="col-md-8">
                 <input class="form-control" type="text" name="name" value="@product.getName()">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label">Game Description:</label>
+            <label class="col-md-3 control-label">Game Description: *</label>
             <div class="col-md-8">
                 <textarea rows="12" cols="50" class="form-control" type="text" name="description">@product.getDescription() </textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label">Game Price:</label>
+            <label class="col-md-3 control-label">Game Price: *</label>
             <div class="col-md-8">
-                <input class="form-control" type="text" value="@product.getPrice()" name="price">
+                <input class="form-control decimal" type="text" value="@product.getPrice()" name="price">
             </div>
         </div>
         <div class="form-group">
@@ -30,26 +30,26 @@
         <div class="form-group">
             <label class="col-md-3 control-label">Amount in stock:</label>
             <div class="col-md-8">
-                <input class="form-control" type="text" value="@product.getAmount()" name="amount">
+                <input class="form-control" type="number" value="@product.getAmount()" name="amount">
             </div>
         </div>
         <div class="form-group">
             <label for="sel1">Choose category:</label>
-            <select class="form-control selecto" id="sel1">
+            <select class="form-control selecto" id="sel1" name="category">
                 <option value="@product.getCategory().getId()">@product.getCategory().getName()</option>
                 @for(c <- categories){
                     @if(c.getId() == product.getCategory().getId()){continue}
-                <option value="@c.getId()">@c.getName()</option>
+                        <option value="@c.getId()">@c.getName()</option>
                 }
             </select>
         </div>
         <div class="form-group">
             <label for="sel2">Choose publisher:</label>
-            <select class="form-control selecto" id="sel2">
+            <select class="form-control selecto" id="sel2" name="publisher">
                 <option value="@product.getCategory().getId()">@product.getPublisher().getName()</option>
                 @for(p <- publishers){
                 @if(p.getId() == product.getPublisher().getId()){continue}
-                <option value="@p.getId()">@p.getName()</option>
+                    <option value="@p.getId()">@p.getName()</option>
                 }
             </select>
         </div>
