@@ -70,7 +70,7 @@ public class Application extends Controller {
         session("username", user.getUsername());
         return redirect(routes.Application.showAll());
         }
-
+    @Security.Authenticated(UserAuth.class)
     public static Result showAll() throws SQLException {
         Connection connection = getDBConnection();
         try {
