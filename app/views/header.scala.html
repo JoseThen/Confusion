@@ -5,7 +5,7 @@
     <h1 class = "pull-left title-color brand">  GameGo Inventory  </h1>
     @if(currentuser!=null){
     <ul class="nav navbar-nav navbar-right">
-        <li class = "link"><h4><span class="glyphicon glyphicon-user"></span>You're now logged in as @currentuser.getEmployeeName()</h4></li>
+        <li class = "link"><h4 style="padding-right:10px;"]><span class="glyphicon glyphicon-user"></span>You're now logged in as @currentuser.getEmployeeName()</h4></li>
         <li><a href="@routes.Application.logout()"><h4><span class="glyphicon glyphicon-log-out"></span> Log Out</h4></a></li>
     </ul>
     }
@@ -15,7 +15,8 @@
     <br/>
     <br/>
     <br/>
-
+<input type="reset" class="btn btn-primary pull-left" onclick="window.location.href='@routes.Application.showAll()'"
+           value="Home">
     @if(currentuser!=null && currentuser.getRole().equals("Manager")){
     <input type="reset" class="btn btn-primary pull-right" onclick="window.location.href='@routes.Application.edit()'"
            value="Add Inventory">
