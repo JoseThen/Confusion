@@ -254,7 +254,7 @@ div.table-title {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
-  height: 320px;
+ 
   margin: auto;
   max-width: 600px;
   padding:5px;
@@ -295,7 +295,7 @@ tr {
 }
 
 tr:hover td {
-  background:#4E5066;
+  background:#88E661;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
@@ -313,7 +313,7 @@ tr:nth-child(odd) td {
 }
 
 tr:nth-child(odd):hover td {
-  background:#4E5066;
+  background:#88E661;
 }
 tr:last-child td:first-child {
   border-bottom-left-radius:3px;

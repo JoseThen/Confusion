@@ -16,10 +16,10 @@
     <br/>
     <br/>
 <input type="reset" class="btn btn-primary pull-left" onclick="window.location.href='@routes.Application.showAll()'"
-           value="Home">
+           value="Home" style="position: relative; z-index: 5;">
     @if(currentuser!=null && currentuser.getRole().equals("Manager")){
     <input type="reset" class="btn btn-primary pull-right" onclick="window.location.href='@routes.Application.edit()'"
-           value="Add Inventory">
+           value="Add Inventory"   style="position: relative; z-index: 5;">
     }
 </div>
 <hr class="title-color">
