@@ -1,14 +1,15 @@
 package controllers;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Category;
 import models.Product;
 import models.Publisher;
-import play.Logger;
+import notifiers.Mails;
+import play.mvc.Content;
 import play.mvc.Security;
-import views.html.*;
 import models.User;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -88,7 +89,6 @@ public class Application extends Controller {
     }
 
     //future product description page
-    // as you can see I used spanish objects hahhaha
     @Security.Authenticated(UserAuth.class)
     public static Result show(long id) throws SQLException {
     	Publisher publicador = new Publisher();
@@ -257,6 +257,27 @@ public class Application extends Controller {
             }
         }
         return redirect(productId!= null ?routes.Application.show(productId) : routes.Application.showAll());
+    }
+
+    @Security.Authenticated(UserAuth.class)
+    public static Result sendReport() throws SQLException {
+        // Prepare report
+        Content htmlReportContent;
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.findAllAvailable(createStatement(connection));
+            htmlReportContent = views.html.reports.inventory.render(products);
+        } finally {
+            connection.close();
+        }
+
+        // Send email
+        List<String> recipients = new ArrayList<String>();
+        recipients.add("hey.november@gmail.com");
+        Mails.sendEmail("Game Go", recipients, htmlReportContent.toString());
+        flash("success", "The report has been successfully sent");
+        return redirect(routes.Application.showAll());
+//        return ok(htmlReportContent);
     }
 
     public static Connection getDBConnection() throws SQLException {

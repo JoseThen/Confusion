@@ -1,0 +1,45 @@
+@(products: List[Product])
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+    <style>
+        table {
+        border-collapse: collapse;
+        }
+
+        table, th, td {
+        border: 1px solid black;
+        }
+
+        table th, td {
+        padding: 3px 8px;
+        }
+
+    </style>
+</head>
+<body>
+<table >
+    <thead>
+    <tr style="background:#50A3A2; color:#ffffff;">
+        <th>ID</th>
+        <th>Game Name</th>
+        <th>Unit Price</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+    @for(p <- products) {
+
+    <tr>
+        <td style="text-align: center;">@p.getId()</td>
+        <td>@p.getName()</td>
+        <td style="text-align: center;">@p.getPrice()</td>
+    </tr>
+
+    }
+    </tbody>
+</table>
+
+</body>
+</html>
