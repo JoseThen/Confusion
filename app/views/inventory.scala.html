@@ -21,7 +21,7 @@
             </div>
             <br/>
             <input type="reset" class="btn btn-primary" onclick="window.location.href='@routes.Application.showAll()'"
-                   value="Clear all filters and show all games in stock">
+                   value="Clear all filters and show all games in stock" style="position: relative; z-index: 5;">
         </div>
         <div class="form-group">
             <label for="sel1">Sort By Name:</label>
@@ -50,10 +50,11 @@
              class="col-xs-6 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
 
             <div>
-                <div class="list-group-item main-color">
+                <div class="list-group-item main-color collapsed" data-toggle="collapse" data-target="#demo"
+                 aria-expanded="false">
                     <h4> Categories </h4>
                 </div>
-                <div id="group-1" class="list-group collapse in">
+                <div id="demo" class="list-group collapse " >
                     @for(c<- categories){
                     <a class="list-group-item" href="@routes.Application.findByCategory(c.getId())">
                         <span class="badge"></span> @c.getName()
@@ -63,10 +64,11 @@
             </div>
 
             <div>
-                <div class="list-group-item main-color">
+                <div class="list-group-item main-color collapsed" data-toggle="collapse" data-target="#deno"
+                aria-expanded="false">
                     <h4>Publishers </h4>
                 </div>
-                <div id="group-2" class="list-group collapse in">
+                <div id="deno" class="list-group collapse ">
                     @for(pub<- publishers){
                     <a class="list-group-item" href="@routes.Application.findByPublisher(pub.getId())">
                         <span class="badge"></span> @pub.getName()
