@@ -1,7 +1,9 @@
 package models;
 
 import controllers.Application;
+import scala.App;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -104,8 +106,9 @@ public class Product {
         return getListOfProducts(rs);
     }
     
-    public  void setSpecific(Statement stmt,Long id) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT * FROM product p,category c where c.category_id = p.category_id and product_id = " + id);
+    public  void setSpecific(Connection connection, Long id) throws SQLException {
+        Statement statement = Application.createStatement(connection);
+        ResultSet rs = statement.executeQuery("SELECT * FROM product p,category c where c.category_id = p.category_id and product_id = " + id);
         // Fetch each row from the result set
         while (rs.next())
         {
@@ -119,8 +122,9 @@ public class Product {
             c.setId(rs.getInt("category_id"));
             c.setName(rs.getString("category_name"));
             setCategory(c);
+            statement = Application.createStatement(connection);
             Publisher pub = new Publisher();
-            pub.findPublisher(Application.getDBConnection(),(long)rs.getInt("publisher_id"));
+            pub.findPublisher(statement, (long)rs.getInt("publisher_id"));
             setPublisher(pub);
         }
       

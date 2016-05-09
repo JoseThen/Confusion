@@ -22,8 +22,6 @@ import javax.sql.DataSource;
 
 public class Application extends Controller {
 
-    public static Connection connection;
-
     public static Result index() {
         if (session().get("username") != null){
             session().remove("username");
@@ -45,25 +43,43 @@ public class Application extends Controller {
         }
         boolean resultOK = false;
 
-            resultOK = User.isLogin(getDBConnection(), username, password);
+        Connection connection = getDBConnection();
+        try {
+            Statement statement = createStatement(connection);
+            resultOK = User.isLogin(statement, username, password);
+        } finally {
             connection.close();
+        }
+
 
         if (!resultOK) {
             flash("error", "Incorrect username or password.");
             return redirect(routes.Application.index());
         }
         User user = new User();
-        user.set_EmployeeClass(getDBConnection(),username);
+
+        connection = getDBConnection();
+        try {
+            Statement statement = createStatement(connection);
+            user.set_EmployeeClass(statement,username);
+        } finally {
+            connection.close();
+        }
+
         session("username", user.getUsername());
         return redirect(routes.Application.showAll());
         }
 
     public static Result showAll() throws SQLException {
-        List <Product> products = Product.findAllAvailable(getDBConnection());
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.findAllAvailable(createStatement(connection));
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products,publishers,categories));
+        } finally {
+            connection.close();
+        }
     }
 
     public static Result logout(){
@@ -76,11 +92,16 @@ public class Application extends Controller {
     @Security.Authenticated(UserAuth.class)
     public static Result show(long id) throws SQLException {
     	Publisher publicador = new Publisher();
-        Product productos = new  Product(); 
-        productos.setSpecific(getDBConnection(), id);
-        publicador.findPublisher(getDBConnection(), (long)productos.getPublisher().getId());
+        Product productos = new  Product();
+        Connection connection = getDBConnection();
+        try {
+            productos.setSpecific(connection, id);
+            publicador.findPublisher(createStatement(connection), (long)productos.getPublisher().getId());
+        } finally {
+            connection.close();
+        }
+
         User user = actions.CurrentUser.currentUser();
-        connection.close();
         return ok(views.html.product.product.render(productos, publicador, user.getRole().equals("Manager")));
       }
 
@@ -89,47 +110,70 @@ public class Application extends Controller {
         String search = "";
         DynamicForm dataForm = Form.form().bindFromRequest();
         search = dataForm.data().get("search");
-        List <Product> products = Product.findByName(getDBConnection(),search);
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.findByName(createStatement(connection),search);
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products,publishers,categories));
+        } finally {
+            connection.close();
+        }
     }
 
     @Security.Authenticated(UserAuth.class)
     public static Result sortByName(String order) throws SQLException {
-        List <Product> products = Product.sortByName(getDBConnection(), order);
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.sortByName(createStatement(connection), order);
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products,publishers,categories));
+        } finally {
+            connection.close();
+        }
     }
 
     @Security.Authenticated(UserAuth.class)
     public static Result sortByPrice(String order) throws SQLException {
-        List <Product> products = Product.sortByPrice(getDBConnection(), order);
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+        Connection connection = getDBConnection();
+        try {
+            List<Product> products = Product.sortByPrice(createStatement(connection), order);
+            List<Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List<Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products, publishers, categories));
+        } finally {
+            connection.close();
+        }
     }
+
+
 
     @Security.Authenticated(UserAuth.class)
     public static Result findByPublisher(Long pubId) throws SQLException {
-        List <Product> products = Product.findByPublisher(getDBConnection(), pubId);
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.findByPublisher(createStatement(connection), pubId);
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products,publishers,categories));
+        } finally {
+            connection.close();
+        }
     }
 
     @Security.Authenticated(UserAuth.class)
     public static Result findByCategory(Long categoryId) throws SQLException {
-        List <Product> products = Product.findByCategory(getDBConnection(), categoryId);
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.inventory.render(products,publishers,categories));
+        Connection connection = getDBConnection();
+        try {
+            List <Product> products = Product.findByCategory(createStatement(connection), categoryId);
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.inventory.render(products,publishers,categories));
+        } finally {
+            connection.close();
+        }
     }
 
     @Security.Authenticated(UserAuth.class)
@@ -137,35 +181,48 @@ public class Application extends Controller {
         User user = actions.CurrentUser.currentUser();
         if (!user.getRole().equals("Manager")){
             flash("error", "You have no privileges to perform this action");
-        }else{
-            Product.delete(getDBConnection(),productId);
+        } else {
+            Connection connection = getDBConnection();
+            try {
+                Product.delete(createStatement(connection),productId);
+            } finally {
+                connection.close();
+            }
         }
-        connection.close();
         return redirect(routes.Application.showAll());
     }
     @Security.Authenticated(UserAuth.class)
     public static Result edit(Long productId) throws SQLException {
-        Product product = new  Product();
-        if (productId!=null) {
-            product.setSpecific(getDBConnection(), productId);
-        }else{
-            product = null;
+        Connection connection = getDBConnection();
+        try {
+            Product product = new  Product();
+            if (productId != null) {
+                product.setSpecific(connection, productId);
+            } else {
+                product = null;
+            }
+            List <Publisher> publishers = Publisher.findAll(createStatement(connection));
+            List <Category> categories = Category.findAll(createStatement(connection));
+            return ok(views.html.product.edit.render(product, publishers, categories));
+        } finally {
+            connection.close();
         }
-        List <Publisher> publishers = Publisher.findAll(getDBConnection());
-        List <Category> categories = Category.findAll(getDBConnection());
-        connection.close();
-        return ok(views.html.product.edit.render(product, publishers, categories));
     }
 
     @Security.Authenticated(UserAuth.class)
     public static Result update(Long productId) throws SQLException {
         User user = actions.CurrentUser.currentUser();
-        if (!user.getRole().equals("Manager")){
+        if (!user.getRole().equals("Manager")) {
             flash("error", "You have no privileges to perform this action");
-        }else {
-            Product product = new  Product();
-            if (productId!=null) {
-                product.setSpecific(getDBConnection(), productId);
+        } else {
+            Product product = new Product();
+            if (productId != null) {
+                Connection connection = getDBConnection();
+                try {
+                    product.setSpecific(connection, productId);
+                } finally {
+                    connection.close();
+                }
             }
             DynamicForm dForm = Form.form().bindFromRequest();
             //change details and save.
@@ -186,22 +243,28 @@ public class Application extends Controller {
                 product.setDescription(description);
                 product.setAmount(amount);
                 product.setPlatform(platform);
-                if(product.getId()!= null) {
-                    product.update(getDBConnection(), categoryId, publisherId);
-                }else{
-                    product.add(getDBConnection(), categoryId, publisherId);
+
+                Connection connection = getDBConnection();
+                try {
+                    if(product.getId()!= null) {
+                        product.update(createStatement(connection), categoryId, publisherId);
+                    }else{
+                        product.add(createStatement(connection), categoryId, publisherId);
+                    }
+                } finally {
+                    connection.close();
                 }
-                connection.close();
             }
         }
         return redirect(productId!= null ?routes.Application.show(productId) : routes.Application.showAll());
     }
 
-
-    public static Statement getDBConnection() throws SQLException {
+    public static Connection getDBConnection() throws SQLException {
         DataSource ds = DB.getDataSource();
-        connection = ds.getConnection();
+        return  ds.getConnection();
+    }
+
+    public static Statement createStatement(Connection connection)  throws SQLException {
         return connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
     }
-
-    }
+}

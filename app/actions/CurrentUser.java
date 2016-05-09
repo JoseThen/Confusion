@@ -7,7 +7,9 @@ import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Http;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class CurrentUser extends Action.Simple {
@@ -30,7 +32,13 @@ public class CurrentUser extends Action.Simple {
             {
                 user = new User();
                 try {
-                    user.set_EmployeeClass(Application.getDBConnection(),username);
+                    Connection connection = Application.getDBConnection();
+                    try {
+                        Statement statement = Application.createStatement(connection);
+                        user.set_EmployeeClass(statement,username);
+                    } finally {
+                        connection.close();
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
