@@ -273,7 +273,7 @@ public class Application extends Controller {
 
         // Send email
         List<String> recipients = new ArrayList<String>();
-        recipients.add("hey.november@gmail.com");
+        recipients.add("gamego.reports@gmail.com");
         Mails.sendEmail("Game Go", recipients, htmlReportContent.toString());
         flash("success", "The report has been successfully sent");
         return redirect(routes.Application.showAll());
